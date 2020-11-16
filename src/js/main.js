@@ -53,19 +53,19 @@ function createScene() {
 	
 	floor = new Floor(0, 0, 0);
 	
-	car = new Car(7.5, -12, 5, 5); 
-	platform = new Platform(0, 0, 0);
-	platform.addCar(car);
+	//car = new Car(7.5, -12, 5, 5); 
+	//platform = new Platform(0, 0, 0);
+	//platform.addCar(car);
 	
-	scene.add(platform);
+	//scene.add(platform);
 	scene.add(floor);
 
-	spotlights[0] = new SpotLight(0, -80, 40);
-	const spotLightHelper = new THREE.SpotLightHelper(spotlights[0].light);
+	//spotlights[0] = new SpotLight(0, -80, 40);
+	//const spotLightHelper = new THREE.SpotLightHelper(spotlights[0].light);
 	// scene.add(spotLightHelper);	
-	spotlights[0].rotateX(Math.PI / 4);
+	//spotlights[0].rotateX(Math.PI / 4);
 	
-   	spotlights[1] = new SpotLight(-80, 0, 40);
+   	/*spotlights[1] = new SpotLight(-80, 0, 40);
 	spotlights[1].rotateY(-Math.PI / 4);
 
     spotlights[2] = new SpotLight(80, 0, 40);
@@ -73,7 +73,7 @@ function createScene() {
 	
 	directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
   	directionalLight.position.set(-95, 0, 25);
-	scene.add(directionalLight);
+	scene.add(directionalLight);*/
 }
 
 function animate() {
@@ -84,7 +84,7 @@ function animate() {
 	let timeDelta = clock.getDelta();
 
 	// Rotates the platform
-	if (platform.get_rotation() === "Left") {
+/*	if (platform.get_rotation() === "Left") {
 		platform.rotate_z(angSpeed * timeDelta);
 	}
 
@@ -110,7 +110,7 @@ function animate() {
         
 		directionalLight.visible = !directionalLight.visible;
     }
-
+*/
 	renderer.render(scene, camera);
 	requestAnimationFrame(animate);
 }
@@ -134,7 +134,7 @@ function onResize() {
 
 function onKeyDown(e) {
 	switch (e.key) {
-		case "1":
+		/*case "1":
 			spotlights[0].turn_Light();
 			onResize();
 			break;
@@ -151,29 +151,29 @@ function onKeyDown(e) {
 			break;
 		case "5":
 			camera = OrtogonalCamera;
-			break;
+			break;*/
 
 		case "Q":	//switches the light On/Off
 		case "q":
-			on_off_Directional = 1;
+			//on_off_Directional = 1;
 			break;
 		case "W":	// changes between Basic and one of the others
 		case "w":
-			floor.changeMesh();
+			/*floor.changeMesh();
 			platform.changeMesh();
-			break;
+			*/break;
 		case "E":	// changes between Phong and Gouraud
 		case "e":
-			floor.changeMesh("changeShadow");
+			/*floor.changeMesh("changeShadow");
 			platform.changeMesh("changeShadow");
-			break;
+			*/break;
 
-		case "ArrowRight":	// rotates the platform
+		/*case "ArrowRight":	// rotates the platform
 			platform.set_rotation("Right");
 			break;
 		case "ArrowLeft":
 			platform.set_rotation("Left");
-			break;
+			break;*/
 	}
 }
 
@@ -181,7 +181,7 @@ function onKeyUp(e) {
 	switch (e.key) {
 		case "ArrowRight":	//stops the platform
 		case "ArrowLeft":
-			platform.set_rotation("Stop");
+			//platform.set_rotation("Stop");
 			break;
 	}
 }
