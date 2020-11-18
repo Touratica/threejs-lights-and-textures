@@ -8,7 +8,7 @@
 			"type": "pwa-msedge",
 			"request": "launch",
 			"name": "Launch index.html",
-			"file": "${workspaceFolder}/index.html",
+			"file": "${workspaceFolder}/src/index.html",
 		}
 	]
 }

@@ -18,6 +18,7 @@ let time = clock.getDelta();
 // Sets the z-axis as the top pointing one
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
+
 function createOrtogonalCamera(x, y, z) {
 	// Adjusts camera ratio so the scene is totally visible 
 	// OrthographicCamera( left, right, top, bottom, near, far )
@@ -49,16 +50,9 @@ function createScene() {
 	scene.background = new THREE.Color("black");
 	
 	// Adds axes to the scene: x-axis is red, y-axis is green, z-axis is blue
-	// scene.add(new THREE.AxesHelper(30));
-	
-	floor = new Floor(0, 0, 0);
-	
-	//car = new Car(7.5, -12, 5, 5); 
-	//platform = new Platform(0, 0, 0);
-	//platform.addCar(car);
-	
-	//scene.add(platform);
-	scene.add(floor);
+		scene.add(new THREE.AxesHelper(30));
+	grass = new Grass(0, 0, 0, 150, 150, "green", "green", "../media/grass.png", "../media/grass.png", "../media/grass_bumpMap.png");
+	scene.add(grass);
 
 	//spotlights[0] = new SpotLight(0, -80, 40);
 	//const spotLightHelper = new THREE.SpotLightHelper(spotlights[0].light);
