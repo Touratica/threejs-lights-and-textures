@@ -4,20 +4,41 @@ let scene, renderer;
 let clock = new THREE.Clock();
 let cameraRatio = 10;
 
-let directionalLight;
+/*let directionalLight;
 let on_off_Directional = 0;
-let spotlights = [];
+let spotlights = [];*/
 
-let car;
-let radius = 2;	// wheel radius
-let platform;
-let floor;
+let grass;
+let ball;
+let ball_radius = 5;
+let flag ; 
+let stem_base = 3;
+let stem_height = 15;
+let flag_w = 5;
+let flag_h= 5;
+let flag_d = 1;
+let stem_color = new THREE.Color("grey");
+let flag_color = new THREE.Color("rgb(254, 90, 6)");
 
 let time = clock.getDelta();
 
 // Sets the z-axis as the top pointing one
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
+//TODO : SKYBOX marada
+//esta torta, endireitar
+function createSkyBox(){
+	scene.background = new THREE.CubeTextureLoader()
+	.setPath( '../media/cubemap/' )
+	.load( [
+		'px.png',
+		'nx.png',
+		'py.png',
+		'ny.png',
+		'pz.png',
+		'nz.png'
+	] );
+}
 
 function createOrtogonalCamera(x, y, z) {
 	// Adjusts camera ratio so the scene is totally visible 
@@ -47,12 +68,24 @@ function createPerspectiveCamera(x, y, z) {
 
 function createScene() {
 	scene = new THREE.Scene();
-	scene.background = new THREE.Color("black");
+	createSkyBox();
+	//scene.background = new THREE.Color("black");
 	
 	// Adds axes to the scene: x-axis is red, y-axis is green, z-axis is blue
-		scene.add(new THREE.AxesHelper(30));
-	grass = new Grass(0, 0, 0, 150, 150, "green", "green", "../media/grass.png", "../media/grass.png", "../media/grass_bumpMap.png");
+	scene.add(new THREE.AxesHelper(30));
+	grass = new Grass(0, 0, 0, 150, 150, "../media/grass.png", "../media/grass_bumpMap.png");
 	scene.add(grass);
+
+	ball = new Ball(20,0,ball_radius,ball_radius,"../media/ball.jpeg", "../media/ball_bump.png");
+	scene.add(ball);
+
+	flag = new Flag(0,0,0,stem_base,stem_height,stem_color,flag_color,flag_w,flag_h,flag_d);
+	scene.add(flag);
+	//TODO: nao esta a aparecer na cena, ver o que esta mal
+
+
+
+	
 
 	//spotlights[0] = new SpotLight(0, -80, 40);
 	//const spotLightHelper = new THREE.SpotLightHelper(spotlights[0].light);
@@ -189,7 +222,7 @@ function __init__() {
 
 	createScene();
 	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);//view to the platform	
-	PerspectiveCamera = createPerspectiveCamera(-40, -90, 40); 
+	PerspectiveCamera = createPerspectiveCamera(-100, -100, 100); 
 	
 	window.addEventListener("resize", onResize)
 	window.addEventListener("keydown", onKeyDown);
