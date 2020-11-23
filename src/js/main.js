@@ -4,16 +4,20 @@ let scene, renderer;
 let clock = new THREE.Clock();
 let cameraRatio = 10;
 
-/*let directionalLight;
+let directionalLight;
 let on_off_Directional = 0;
-let spotlights = [];*/
+let pointLight;
+let on_off_Point;
+
+let allMaterials = [];
+let changeWireframe = false;
 
 let grass;
 let ball;
-let ball_radius = 5;
+let ball_radius = 3;
 let flag ; 
-let stem_base = 3;
-let stem_height = 15;
+let stem_base = 1.5;
+let stem_height = 30;
 let flag_w = 5;
 let flag_h= 5;
 let flag_d = 1;
@@ -76,31 +80,27 @@ function createScene() {
 	grass = new Grass(0, 0, 0, 150, 150, "../media/grass.png", "../media/grass_bumpMap.png");
 	scene.add(grass);
 
-	ball = new Ball(20,0,ball_radius,ball_radius,"../media/ball.jpeg", "../media/ball_bump.png");
+	ball = new Ball(0,0,ball_radius,ball_radius,"../media/ball.jpeg", "../media/ball_bump.png");
 	scene.add(ball);
 
-	flag = new Flag(0,0,0,stem_base,stem_height,stem_color,flag_color,flag_w,flag_h,flag_d);
+	flag = new Flag(20,0,stem_height/2,stem_base,stem_height,stem_color,flag_color,flag_w,flag_h,flag_d);
 	scene.add(flag);
-	//TODO: nao esta a aparecer na cena, ver o que esta mal
+
+	directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
+	directionalLight.position.set(0, 45, 45);
+	scene.add(directionalLight);
+  	lightHelper = new THREE.DirectionalLightHelper(directionalLight);
+	  scene.add(lightHelper);
+	  
+	pointLight = new THREE.PointLight(0xffffff, 1, 100);
+  	pointLight.position.set(-45, 0, 45);
+  	scene.add(pointLight);
+
+  	let sphereSize = 3;
+  	pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+  	scene.add(pointLightHelper);
 
 
-
-	
-
-	//spotlights[0] = new SpotLight(0, -80, 40);
-	//const spotLightHelper = new THREE.SpotLightHelper(spotlights[0].light);
-	// scene.add(spotLightHelper);	
-	//spotlights[0].rotateX(Math.PI / 4);
-	
-   	/*spotlights[1] = new SpotLight(-80, 0, 40);
-	spotlights[1].rotateY(-Math.PI / 4);
-
-    spotlights[2] = new SpotLight(80, 0, 40);
-	spotlights[2].rotateY(Math.PI / 4);
-	
-	directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-  	directionalLight.position.set(-95, 0, 25);
-	scene.add(directionalLight);*/
 }
 
 function animate() {
@@ -119,25 +119,28 @@ function animate() {
 		platform.rotate_z(-angSpeed * timeDelta);
 	}
 
-	if (spotlights[0].turnLight) {
-		spotlights[0].OnOff();
-	}
-	
-	if (spotlights[1].turnLight) {
-		spotlights[1].OnOff();
-	}
-
-	if (spotlights[2].turnLight) {
-		spotlights[2].OnOff();
-	}
+	*/
+	//Turns on/off the point light
+	if (on_off_Point == 1) {
+        on_off_Point = 0;
+		pointLight.visible = !pointLight.visible;
+    }
 
 	// Turns on/off the directional light
 	if (on_off_Directional == 1) {
         on_off_Directional = 0;
         
 		directionalLight.visible = !directionalLight.visible;
-    }
-*/
+	}
+	
+	if (changeWireframe) {//TODO: fix wireframe function
+		
+		for (let i in allMaterials) { //percorre todos, mas nao muda
+		  allMaterials[i].wireframe = !allMaterials[i].wireframe;
+		}
+		changeWireframe = false;
+	  }
+
 	renderer.render(scene, camera);
 	requestAnimationFrame(animate);
 }
@@ -179,16 +182,22 @@ function onKeyDown(e) {
 		case "5":
 			camera = OrtogonalCamera;
 			break;*/
+		case "D":
+		case "d":
+			on_off_Directional = 1;
+			break;
+		case "P":
+		case "p":
+			on_off_Point = 1;
 
 		case "Q":	//switches the light On/Off
 		case "q":
 			//on_off_Directional = 1;
 			break;
-		case "W":	// changes between Basic and one of the others
+		case "W":	// changes to wireframe
 		case "w":
-			/*floor.changeMesh();
-			platform.changeMesh();
-			*/break;
+			changeWireframe = true;	
+			break;
 		case "E":	// changes between Phong and Gouraud
 		case "e":
 			/*floor.changeMesh("changeShadow");
@@ -222,7 +231,7 @@ function __init__() {
 
 	createScene();
 	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);//view to the platform	
-	PerspectiveCamera = createPerspectiveCamera(-100, -100, 100); 
+	PerspectiveCamera = createPerspectiveCamera(-50, -50, 50); 
 	
 	window.addEventListener("resize", onResize)
 	window.addEventListener("keydown", onKeyDown);

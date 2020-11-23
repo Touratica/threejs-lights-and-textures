@@ -18,7 +18,8 @@ class Component extends THREE.Object3D {
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
 		
-        this.add(basicMat);
+		this.add(phongMat);
+		allMaterials.push(phongMat, basicMat);
 	}
 
 	addPlane(w, d, textureMapPath, bumpMapPath) {
@@ -41,7 +42,8 @@ class Component extends THREE.Object3D {
 	
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
-        this.add(basicMat);
+		this.add(phongMat);
+		allMaterials.push(phongMat, basicMat);
 	}
 
 	addCylinderHorizontal(baseD, baseU, height,textureMapPath, bumpMapPath) {
@@ -85,7 +87,8 @@ class Component extends THREE.Object3D {
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
         
-        this.add(basicMat);
+		this.add(phongMat);
+		allMaterials.push(phongMat, basicMat);
 	}
 
 	addSphere(radius,textureMapPath ,bumpMapPath) {
