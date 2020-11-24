@@ -1,4 +1,7 @@
-class Component extends THREE.Object3D {
+import * as THREE from '../../node_modules/three/build/three.module.js';
+import {allMaterials} from './main.mjs';
+
+export class Component extends THREE.Object3D {
 	constructor(x, y, z) {
 		super();
 		this.position.set(x,y,z);

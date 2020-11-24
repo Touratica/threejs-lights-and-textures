@@ -1,4 +1,6 @@
-class Ball extends Component {
+import {Component} from './Component.mjs';
+
+export class Ball extends Component {
     constructor(x, y, z, radius,textureMapPath ,bumpMapPath) {
       super(x, y, z);
       this.addSphere(radius,textureMapPath ,bumpMapPath);  

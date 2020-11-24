@@ -1,3 +1,8 @@
+import * as THREE from '../../node_modules/three/build/three.module.js';
+import {Grass} from './Grass.mjs';
+import {Ball} from './Ball.mjs';
+import {Flag} from './Flag.mjs';
+
 let camera, PerspectiveCamera, OrtogonalCamera;
 
 let scene, renderer;
@@ -9,7 +14,7 @@ let on_off_Directional = 0;
 let pointLight;
 let on_off_Point;
 
-let allMaterials = [];
+export let allMaterials = [];
 let changeWireframe = false;
 
 let grass;
@@ -89,7 +94,7 @@ function createScene() {
 	directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
 	directionalLight.position.set(0, 45, 45);
 	scene.add(directionalLight);
-  	lightHelper = new THREE.DirectionalLightHelper(directionalLight);
+  	let lightHelper = new THREE.DirectionalLightHelper(directionalLight);
 	  scene.add(lightHelper);
 	  
 	pointLight = new THREE.PointLight(0xffffff, 1, 100);
@@ -97,13 +102,13 @@ function createScene() {
   	scene.add(pointLight);
 
   	let sphereSize = 3;
-  	pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
+	let pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
   	scene.add(pointLightHelper);
 
 
 }
 
-function animate() {
+export function animate() {
 	// Animation functions
 
 	let angSpeed = 1;
@@ -222,7 +227,7 @@ function onKeyUp(e) {
 	}
 }
 
-function __init__() {
+export function __init__() {
 	renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setClearColor(0xffffff);
 	renderer.setSize(window.innerWidth, window.innerHeight);
