@@ -1,0 +1,19 @@
+{
+  "name": "proj4",
+  "version": "0.1.0",
+  "description": "",
+  "main": "src/js/main.js",
+  "dependencies": {
+    "three": "^0.122.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Touratica/CGra2020/tree/master/proj4"
+  },
+  "author": "",
+  "license": "ISC"
+}
