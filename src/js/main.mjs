@@ -34,19 +34,18 @@ let time = clock.getDelta();
 // Sets the z-axis as the top pointing one
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
-//TODO : SKYBOX marada
-//esta torta, endireitar
+// TODO: #5 SkyBox is crooked
 function createSkyBox(){
 	scene.background = new THREE.CubeTextureLoader()
-	.setPath( '../media/cubemap/' )
-	.load( [
+	.setPath('../media/cubemap/')
+	.load([
 		'px.png',
 		'nx.png',
 		'py.png',
 		'ny.png',
 		'pz.png',
 		'nz.png'
-	] );
+	]);
 }
 
 function createOrtogonalCamera(x, y, z) {
@@ -78,7 +77,7 @@ function createPerspectiveCamera(x, y, z) {
 function createScene() {
 	scene = new THREE.Scene();
 	createSkyBox();
-	//scene.background = new THREE.Color("black");
+	// scene.background = new THREE.Color("black");
 	
 	// Adds axes to the scene: x-axis is red, y-axis is green, z-axis is blue
 	scene.add(new THREE.AxesHelper(30));
@@ -138,13 +137,13 @@ export function animate() {
 		directionalLight.visible = !directionalLight.visible;
 	}
 	
-	if (changeWireframe) {//TODO: fix wireframe function
-		
+	//TODO: #6 Fix wireframe function
+	if (changeWireframe) {	
 		for (let i in allMaterials) { //percorre todos, mas nao muda
-		  allMaterials[i].wireframe = !allMaterials[i].wireframe;
+			allMaterials[i].wireframe = !allMaterials[i].wireframe;
 		}
 		changeWireframe = false;
-	  }
+	}
 
 	renderer.render(scene, camera);
 	requestAnimationFrame(animate);
@@ -205,9 +204,9 @@ function onKeyDown(e) {
 			break;
 		case "E":	// changes between Phong and Gouraud
 		case "e":
-			/*floor.changeMesh("changeShadow");
-			platform.changeMesh("changeShadow");
-			*/break;
+			// floor.changeMesh("changeShadow");
+			// platform.changeMesh("changeShadow");
+			break;
 
 		/*case "ArrowRight":	// rotates the platform
 			platform.set_rotation("Right");
@@ -220,9 +219,9 @@ function onKeyDown(e) {
 
 function onKeyUp(e) {
 	switch (e.key) {
-		case "ArrowRight":	//stops the platform
+		case "ArrowRight": //stops the platform
 		case "ArrowLeft":
-			//platform.set_rotation("Stop");
+			// platform.set_rotation("Stop");
 			break;
 	}
 }
