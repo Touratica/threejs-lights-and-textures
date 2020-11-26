@@ -18,6 +18,8 @@ export let allMaterials = [];
 let changeWireframe = false;
 
 let grass;
+let grassW = 150;
+let grassD = 150;
 let ball;
 let ball_radius = 3;
 let flag ; 
@@ -36,6 +38,28 @@ THREE.Object3D.DefaultUp.set(0, 0, 1);
 
 // TODO: #5 SkyBox is crooked
 function createSkyBox(){
+
+	let skyboxgeo = new THREE.CubeGeometry(grassW,grassW,grassD);
+
+	let skyboxfaces = [
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/px.png"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nx.png"),side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/py.png"),side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/ny.png"),side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/pz.png"),side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nz.png"),side: THREE.BackSide})
+	];
+
+	let skyboxmaterial = new THREE.MeshFaceMaterial (skyboxfaces);
+
+	let skyboxmesh = new THREE.Mesh(skyboxgeo,skyboxmaterial);
+
+	skyboxmesh.position.set(0,0,grassW/2-1)
+
+	scene.add(skyboxmesh);
+
+
+	/*
 	scene.background = new THREE.CubeTextureLoader()
 	.setPath('../media/cubemap/')
 	.load([
@@ -46,6 +70,7 @@ function createSkyBox(){
 		'pz.png',
 		'nz.png'
 	]);
+	*/
 }
 
 function createOrtogonalCamera(x, y, z) {
@@ -81,7 +106,7 @@ function createScene() {
 	
 	// Adds axes to the scene: x-axis is red, y-axis is green, z-axis is blue
 	scene.add(new THREE.AxesHelper(30));
-	grass = new Grass(0, 0, 0, 150, 150, "../media/grass.png", "../media/grass_bumpMap.png");
+	grass = new Grass(0, 0, 0, grassW, grassD, "../media/grass.png", "../media/grass_bumpMap.png");
 	scene.add(grass);
 
 	ball = new Ball(0,0,ball_radius,ball_radius,"../media/ball.jpeg", "../media/ball_bump.png");
@@ -235,7 +260,7 @@ export function __init__() {
 
 	createScene();
 	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);//view to the platform	
-	PerspectiveCamera = createPerspectiveCamera(-50, -50, 50); 
+	PerspectiveCamera = createPerspectiveCamera(60, -60, 20); 
 	
 	window.addEventListener("resize", onResize)
 	window.addEventListener("keydown", onKeyDown);
