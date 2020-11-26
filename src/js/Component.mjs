@@ -6,14 +6,16 @@ export class Component extends THREE.Object3D {
 		super();
 		this.position.set(x,y,z);
         this.phongMesh = [];
-        this.basicMesh = [];
+		this.basicMesh = [];
+		this.currentMesh = this.phongMesh;
+		this.shadeOn = true;
 	}
 
 	addCuboid(x, y, z, w, h, d, color) {
 		let geometry = new THREE.BoxGeometry(d, w, h);
-
-		let basicMat = new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({color: color}));
-		let phongMat = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color: color}));
+		let meshPhong = new THREE.MeshPhongMaterial({color: color, wireframe : false});
+		let basicMat = new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({color: color, wireframe :false}));
+		let phongMat = new THREE.Mesh(geometry,meshPhong );
 		
 		basicMat.position.set(x,y,z);
 		phongMat.position.set(x,y,z);
@@ -23,16 +25,19 @@ export class Component extends THREE.Object3D {
 		
 		this.add(phongMat);
 		allMaterials.push(phongMat, basicMat);
+		return  meshPhong;
 	}
 
 	addPlane(w, d, textureMapPath, bumpMapPath) {
 
-		let geometry = new THREE.PlaneBufferGeometry(d, w);
+		let geometry = new THREE.PlaneBufferGeometry(d, w,50,50);
+		//width, height, width segments, height segments
 		let bump = new THREE.TextureLoader().load(bumpMapPath);
 		let texture = new THREE.TextureLoader().load(textureMapPath);
+		let meshPhong = new THREE.MeshPhongMaterial({map : texture, bumpMap: bump})
 
 		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map : texture}));
-		let phongMat = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map : texture, bumpMap: bump}));
+		let phongMat = new THREE.Mesh(geometry,meshPhong );
 
 		
 		bump.wrapS = THREE.RepeatWrapping;
@@ -47,36 +52,16 @@ export class Component extends THREE.Object3D {
 		this.basicMesh.push(basicMat);
 		this.add(phongMat);
 		allMaterials.push(phongMat, basicMat);
+		return meshPhong;
 	}
 
-	addCylinderHorizontal(baseD, baseU, height,textureMapPath, bumpMapPath) {
-		let geometry = new THREE.CylinderGeometry(baseD / 2, baseU / 2, height, 16, 1);
-		geometry.rotateZ(Math.PI / 2);
-
-		let bump = new THREE.TextureLoader().load(bumpMapPath);
-		let texture = new THREE.TextureLoader().load(textureMapPath);
-
-		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map : texture}));
-		let phongMat = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map : texture, bumpMap: bump}));
-		bump.wrapS = THREE.RepeatWrapping;
-		bump.wrapT = THREE.RepeatWrapping;
-		bump.repeat.set(4, 4);
-		
-		texture.wrapS = THREE.RepeatWrapping;
-    	texture.wrapT = THREE.RepeatWrapping;
-		texture.repeat.set(4, 4);
-	
-		this.phongMesh.push(phongMat);
-		this.basicMesh.push(basicMat);
-        this.add(basicMat);
-	}
 	
 
 	addCylinderVertical(x, y, z, base, height, color) { 
 		let geometry = new THREE.CylinderGeometry(base / 2, base / 2, height, 16, 1);
-
+		let meshPhong = new THREE.MeshPhongMaterial({color: color, wireframe : false})
 		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: color}));
-		let phongMat = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({color: color}));
+		let phongMat = new THREE.Mesh(geometry, meshPhong);
 		
 		basicMat.position.set(x, y, z);
 		phongMat.position.set(x, y, z);
@@ -92,6 +77,7 @@ export class Component extends THREE.Object3D {
         
 		this.add(phongMat);
 		allMaterials.push(phongMat, basicMat);
+		return meshPhong;
 	}
 
 	addSphere(radius,textureMapPath ,bumpMapPath) {
@@ -99,53 +85,31 @@ export class Component extends THREE.Object3D {
 		let geometry = new THREE.SphereGeometry(radius, 32, 32);
 		let bump = new THREE.TextureLoader().load(bumpMapPath);
 		let texture = new THREE.TextureLoader().load(textureMapPath);
+		let mesh = new THREE.MeshBasicMaterial({map : texture , wireframe : false});
 
-		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map : texture}));
-		let phongMat = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({map : texture, bumpMap: bump}));
+		let basicMat = new THREE.Mesh(geometry, mesh);
+		let phongMat = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: "white", bumpMap: bump, shininess : 70, specular: "white",bumpScale: 1}));
 
 		bump.wrapS = THREE.RepeatWrapping;
 		bump.wrapT = THREE.RepeatWrapping;
-		bump.repeat.set(4, 4);
-		
+		bump.repeat.set(3, 3);
+	
+		/*
 		texture.wrapS = THREE.RepeatWrapping;
     	texture.wrapT = THREE.RepeatWrapping;
 		texture.repeat.set(4, 4);
-	
+		*/
+
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
-        this.add(basicMat);
+		//this.add(basicMat);
+		this.add(phongMat);
+		return mesh;
 		//this.rotateZ((Math.PI / 2);
 		
 	}
 
-	addHorizontalExtrusion(x, y, z, shape, height, color) {
-		let geometry = new THREE.ExtrudeGeometry(shape, {steps: 1, depth: height, bevelEnabled: false});
-		geometry.rotateY(-Math.PI / 2);
-
-		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: color, side: THREE.DoubleSide}));
-		let phongMat = new THREE.Mesh(geometry,
-			new THREE.MeshPhongMaterial({color: color, side: THREE.DoubleSide, specular: 0x424849}));
-		
-		basicMat.position.set(x + height / 2, y, z);
-		phongMat.position.set(x + height / 2, y, z);
-		
-
-		this.phongMesh.push(phongMat);
-		
-        this.basicMesh.push(basicMat);
-        
-        this.add(basicMat);
-	}
-
-	addCone(x, y, z) {
-		let geometry = new THREE.ConeGeometry(5, 8, 64, 1, true, 0);
-		
-		let material = new THREE.MeshBasicMaterial({color: "rgb(241, 202, 1)"});
-		let cone = new THREE.Mesh(geometry, material);
-		cone.rotateX(Math.PI/2);
-		cone.position.set(x, y, z);
-		this.add(cone);
-	}
+	
 
 	addComponent(comp, x, y, z) {
 		this.add(comp);
@@ -154,34 +118,18 @@ export class Component extends THREE.Object3D {
 
 	position_set(x, y, z) {
 		this.position.set(x, y, z);
-    }
-
-	/*changeMesh(flag) {
-		if (flag === "changeShadow") {
-	        if (this.currentMesh === this.lambertMesh) {
-				this.removeMesh();
-	            this.addMesh(this.phongMesh);
-	        }
-	        else if (this.currentMesh === this.phongMesh) {
-	        	this.removeMesh();
-	        	this.addMesh(this.lambertMesh);
-	        }
-	        else {
-	        	this.removeMesh();
-	        	this.addMesh(this.lastMesh);
-	        }
-        }
-		else {
-			if (this.currentMesh !== this.basicMesh) {
-				this.removeMesh();
-				this.lastMesh = this.currentMesh;
-				this.addMesh(this.basicMesh);
-			}
-			else {
-				this.removeMesh();
-				this.addMesh(this.lastMesh);
-			}
+	}
+	changeMesh() {
+		
+		if (this.shadeOn) {
+			this.removeMesh(this.phongMesh);
+			this.addMesh(this.basicMesh);
+		} else {
+			this.removeMesh(this.basicMesh);
+			this.addMesh(this.phongMesh);
 		}
+		this.shadeOn = !this.shadeOn;
+		
 	}
 
 	//mesh vector has all objects of the scene. 
@@ -195,8 +143,15 @@ export class Component extends THREE.Object3D {
 
 	//removes the mesh of all objects.
 	removeMesh() {
+		
 		for (let i = 0; i < this.currentMesh.length; i++) {
 			this.remove(this.currentMesh[i]);
 		}
-	}*/
+		console.log("vou terminar o remove");
+	}
+
+	Rotate(a){
+		this.rotateZ(a);
+	}
+	
 }

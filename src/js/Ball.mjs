@@ -1,24 +1,39 @@
+import * as THREE from '../../node_modules/three/build/three.module.js';
 import {Component} from './Component.mjs';
+//import {main} from './main.mjs';
 
 export class Ball extends Component {
 	constructor(x, y, z, radius,textureMapPath ,bumpMapPath) {
 		super(x, y, z);
-		this.addSphere(radius,textureMapPath ,bumpMapPath);  
+		
+		this.motion = true;
+		
+		this.material = this.addSphere(radius,textureMapPath ,bumpMapPath); 
 	}
 
-	move(velocity) {
+	get_motion(){
+		return this.motion;
+	}
+	
+	change_motion(){
+		this.motion = !this.motion;
+	}
+
+	move(velocity,clock,flag) {
 		let angle;
 		let time = clock.getDelta();
-		if (angle < 0.02) {
-			angle += 0.005 * time;
-		}
-		else {
+		/*if (angle < 0.02) {*/
+		angle += 0.005 * time;
+		//}*/
+		/*else {
 			angle = 0.02;
-		}
+		}*/
 		angle *= velocity;
-		let position = new THREE.Vector3(cube.position.x, cube.position.y, cube.position.z);
+		
+		//let position = new THREE.Vector3(flag.position.x, flag.position.y, flag.position.z);
+		const position = new THREE.Vector3(0,0,0);
 		let axis = new THREE.Vector3(0, velocity, 0);
-		rotateAroundCube(this, axis, position, angle);
+		rotateAroundFlag(this, axis, position, angle);
 
 		this.rotateY(angle);
 	}
