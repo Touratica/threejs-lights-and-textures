@@ -1,11 +1,6 @@
+
 import * as THREE from '../../node_modules/three/build/three.module.js';
-import * as ORBIT from '../../node_modules/three/js/controls/OrbitControls.js';
-//OrbitControls.js:1 Failed to load resource: the server responded with a status of 404 (Not Found)
-//:5500/node_modules/three/src/math/:1 Failed to load module script: 
-//The server responded with a non-JavaScript MIME type of "text/html". 
-//Strict MIME type checking is enforced for module scripts per HTML spec.
-//deu isto xD
-import * as MAT from '../../node_modules/three/src/math';
+import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import {Grass} from './Grass.mjs';
 import {Ball} from './Ball.mjs';
 import {Flag} from './Flag.mjs';
