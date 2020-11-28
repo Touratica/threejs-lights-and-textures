@@ -1,4 +1,3 @@
-
 import * as THREE from '../../node_modules/three/build/three.module.js';
 import {OrbitControls} from '../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import {Grass} from './Grass.mjs';
@@ -7,10 +6,10 @@ import {Flag} from './Flag.mjs';
 
 
 let camera, PerspectiveCamera, OrtogonalCamera;
+let  scene = [];
 
-let scene, renderer;
+let renderer;
 let clock = new THREE.Clock();
-let velocity = 10;
 let cameraRatio = 10;
 
 let directionalLight;
@@ -37,10 +36,11 @@ let flag_d = 1;
 let stem_color = new THREE.Color("grey");
 let flag_color = new THREE.Color("rgb(254, 90, 6)");
 
+let pause = false;
+
 // Sets the z-axis as the top pointing one
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
-// TODO: #5 SkyBox is crooked
 function createSkyBox(){
 
 	let skyboxgeo = new THREE.CubeGeometry(grassW,grassW,grassD);
@@ -51,7 +51,7 @@ function createSkyBox(){
 		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/py.png"),side: THREE.BackSide}),
 		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/ny.png"),side: THREE.BackSide}),
 		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/pz.png"),side: THREE.BackSide}),
-		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nz.png"),side: THREE.BackSide})
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nz.png"),side: THREE.DoubleSide})
 	];
 
 	let skyboxmaterial = new THREE.MeshFaceMaterial (skyboxfaces);
@@ -60,43 +60,24 @@ function createSkyBox(){
 
 	skyboxmesh.position.set(0,0,grassW/2-1)
 
-	scene.add(skyboxmesh);
-
-
-	/*
-	scene.background = new THREE.CubeTextureLoader()
-	.setPath('../media/cubemap/')
-	.load([
-		'px.png',
-		'nx.png',
-		'py.png',
-		'ny.png',
-		'pz.png',
-		'nz.png'
-	]);
-	*/
+	scene[0].add(skyboxmesh);
 }
-
-function rotateAroundFlag( axis, point, angle) {
-
-	ball.position.sub(point); // remove the offset
-	ball.position.applyAxisAngle(axis, angle); // rotate the POSITION
-	flag.position.add(point); // re-add the offset
+//creates a new scene with Pause Mode
+function createPauseMessage() {
+	scene[1] = new THREE.Scene();
   
-	ball.rotateOnAxis(axis, angle); // rotate the OBJECT
-	rotateAroundAxis(obj, axis, angle);
+	let spriteMap = new THREE.TextureLoader().load('../media/pauseScreen.png');
+	let spriteMaterial = new THREE.SpriteMaterial({
+	  map: spriteMap
+	});
+	let message = new THREE.Sprite(spriteMaterial);
+	message.scale.set(20, 20, 1);
+	message.visible = true;
+	message.position.set(0,0,0);
+  
+	scene[1].add(message);
   }
 
-
-  let rotationWorldMatrix;
-
-  function rotateAroundAxis( axis, radians) {
-	rotationWorldMatrix = new THREE.Matrix4();
-	rotationWorldMatrix.makeRotationAxis(axis.normalize(), radians);
-	rotationWorldMatrix.multiply(object.matrix);
-	ball.matrix = rotationWorldMatrix;
-	ball.rotation.setFromRotationMatrix(ball.matrix);
-  }
 function createOrtogonalCamera(x, y, z) {
 	// Adjusts camera ratio so the scene is totally visible 
 	// OrthographicCamera( left, right, top, bottom, near, far )
@@ -119,70 +100,67 @@ function createPerspectiveCamera(x, y, z) {
 	camera.position.x = x;
 	camera.position.y = y;
 	camera.position.z = z;
-	camera.lookAt(scene.position);
+	camera.lookAt(scene[0].position);
 	return camera;
 }
 
 function createScene() {
-	scene = new THREE.Scene();
+	
+	scene[0] = new THREE.Scene();
 	createSkyBox();
 	// scene.background = new THREE.Color("black");
 	
 	// Adds axes to the scene: x-axis is red, y-axis is green, z-axis is blue
-	scene.add(new THREE.AxesHelper(30));
+	//cene[0].add(new THREE.AxesHelper(30));
 	grass = new Grass(0, 0, 0, grassW, grassD, "../media/grass.png", "../media/grass_bumpMap.png");
-	scene.add(grass);
+	scene[0].add(grass);
 
 	ball = new Ball(0,0,ball_radius,ball_radius,"../media/ball.jpeg", "../media/bump_ball.jpeg");
-	scene.add(ball);
+	scene[0].add(ball);
 
 	flag = new Flag(20,0,stem_height/2,stem_base,stem_height,stem_color,flag_color,flag_w,flag_h,flag_d);
-	scene.add(flag);
+	scene[0].add(flag);
 
 	directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
 	directionalLight.position.set(0, 45, 45);
-	scene.add(directionalLight);
+	scene[0].add(directionalLight);
   	let lightHelper = new THREE.DirectionalLightHelper(directionalLight);
-	  scene.add(lightHelper);
+	//  scene[0].add(lightHelper);
 	  
-	pointLight = new THREE.PointLight(0xffffff, 1, 100);
-  	pointLight.position.set(45, 0, 45);
-  	scene.add(pointLight);
+	pointLight = new THREE.PointLight(0xffffff, 1.2, 1000);
+	pointLight.position.set(45, -45, 3);
+  	scene[0].add(pointLight);
 
   	let sphereSize = 3;
 	let pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
-  	scene.add(pointLightHelper);
+  	//scene[0].add(pointLightHelper);
 
 
 }
 function changeAllWireFrames(){
-	let value = ball.material.wireframe;
-	ball.material.wireframe = !value;
-	flag.stemMat.wireframe = !value;
-	flag.flagMat.wireframe = !value;
-	grass.grassMat.wireframe = !value;
+	ball.changeWireframe();
+	flag.changeWireframe();
+	grass.changeWireframe();
+
 	changeWireframe = false;
 
 }
 
+function pause_unpause(){
+	if(pause){
+		createPauseMessage();
+	}
+}
 
 export function animate() {
 	// Animation functions
 
 	let angSpeed = 1;
 
+	let velocity = 1;
+
 	let timeDelta = clock.getDelta();
 
-	// Rotates the platform
-/*	if (platform.get_rotation() === "Left") {
-		platform.rotate_z(angSpeed * timeDelta);
-	}
-
-	if (platform.get_rotation() === "Right") {
-		platform.rotate_z(-angSpeed * timeDelta);
-	}
-
-	*/
 	//Turns on/off the point light
 	if (on_off_Point == 1) {
         on_off_Point = 0;
@@ -206,15 +184,31 @@ export function animate() {
 		changeMesh = false;
 	}
 
-	if(ball.get_motion()){
-		//ball.move(velocity,clock,flag);
+	if(ball.get_motion() && !pause){
+		ball.move(velocity * timeDelta);
 	}
 	
-	flag.Rotate(timeDelta * angSpeed);
+	if(flag.get_motion() && !pause){
+		flag.Rotate(timeDelta * angSpeed);
+	}
 
-	renderer.render(scene, camera);
+	render();
+
 	requestAnimationFrame(animate);
 }
+
+function render() {
+
+	renderer.autoClear = false;
+	renderer.clear();
+	renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+	renderer.render(scene[0], PerspectiveCamera);
+	
+	if(pause){
+		renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
+		renderer.render(scene[1], OrtogonalCamera);
+	}
+  }
 
 function onResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -235,29 +229,13 @@ function onResize() {
 
 function onKeyDown(e) {
 	switch (e.key) {
-		/*case "1":
-			spotlights[0].turn_Light();
-			onResize();
-			break;
-		case "2":
-			spotlights[1].turn_Light();
-			onResize();
-			break;
-		case "3":
-			spotlights[2].turn_Light();
-			onResize();
-			break;
-		case "4":
-			camera = PerspectiveCamera;
-			break;
-		case "5":
-			camera = OrtogonalCamera;
-			break;*/
 
-		case "B":	// changes the mesh
+		case "B":	// stops the movement of the ball
 		case "b":
-			ball.change_motion();	
-			break;
+			if (!pause){
+				ball.change_motion();
+			}
+			break;	
 		case "D":
 		case "d":
 			on_off_Directional = 1;
@@ -265,59 +243,49 @@ function onKeyDown(e) {
 		case "P":
 		case "p":
 			on_off_Point = 1;
-
-		case "Q":	//switches the light On/Off
-		case "q":
-			//on_off_Directional = 1;
 			break;
+
 		case "W":	// changes to wireframe
 		case "w":
 			changeWireframe = true;	
 			break;
 		case "I":	// changes the mesh
 		case "i":
-			changeMesh = true;	
+			changeMesh = true;
+			break;	
+		case "S":	// Pause
+		case "s":
+			pause = !pause;
+			pause_unpause();
 			break;
-		
-		case "E":	// changes between Phong and Gouraud
-		case "e":
-			// floor.changeMesh("changeShadow");
-			// platform.changeMesh("changeShadow");
-			break;
-
-		/*case "ArrowRight":	// rotates the platform
-			platform.set_rotation("Right");
-			break;
-		case "ArrowLeft":
-			platform.set_rotation("Left");
-			break;*/
-	}
-}
-
-function onKeyUp(e) {
-	switch (e.key) {
-		case "ArrowRight": //stops the platform
-		case "ArrowLeft":
-			// platform.set_rotation("Stop");
+		case "R":	// Reset
+		case "r":
+			if(pause){
+				ball.initial_state();
+				flag.initial_state();
+				grass.initial_state();
+			}
 			break;
 	}
 }
+
+
 
 export function __init__() {
 	renderer = new THREE.WebGLRenderer({antialias: true});
 	renderer.setClearColor(0xffffff);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-
 	document.body.appendChild(renderer.domElement);
 
 	createScene();
-	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);//view to the platform	
+	createPauseMessage();
+	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);
 	PerspectiveCamera = createPerspectiveCamera(60, -60, 20);
 	
 	const controls = new OrbitControls( PerspectiveCamera, renderer.domElement );
 	controls.update();
-	
+	render();
 	window.addEventListener("resize", onResize)
 	window.addEventListener("keydown", onKeyDown);
-	window.addEventListener("keyup", onKeyUp);
+	
 }

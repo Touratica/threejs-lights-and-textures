@@ -1,14 +1,31 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
 import {Component} from './Component.mjs';
-//import {main} from './main.mjs';
+
 
 export class Ball extends Component {
 	constructor(x, y, z, radius,textureMapPath ,bumpMapPath) {
 		super(x, y, z);
+
+		this.radius = radius;
+		this.initial_x = x;
+		this.initial_y = y;
+		this.initial_z = z;
 		
 		this.motion = true;
+
+		this.step = 0;
 		
-		this.material = this.addSphere(radius,textureMapPath ,bumpMapPath); 
+		this.addSphere(radius,textureMapPath ,bumpMapPath); 
+
+		this.currentMesh = this.phongMesh;
+
+	}
+
+	initial_state(){
+
+		super.initial_state();
+		this.position.set(this.initial_x,this.initial_y,this.initial_z);
+		this.step = 0;
 	}
 
 	get_motion(){
@@ -19,22 +36,20 @@ export class Ball extends Component {
 		this.motion = !this.motion;
 	}
 
-	move(velocity,clock,flag) {
-		let angle;
-		let time = clock.getDelta();
-		/*if (angle < 0.02) {*/
-		angle += 0.005 * time;
-		//}*/
-		/*else {
-			angle = 0.02;
-		}*/
-		angle *= velocity;
-		
-		//let position = new THREE.Vector3(flag.position.x, flag.position.y, flag.position.z);
-		const position = new THREE.Vector3(0,0,0);
-		let axis = new THREE.Vector3(0, velocity, 0);
-		rotateAroundFlag(this, axis, position, angle);
+	stop_motion(){
+		this.motion = false;
+	}
 
-		this.rotateY(angle);
+	start_motion(){
+		this.motion = true;
+	}
+
+	move(step) {
+
+		this.step += step;
+        this.position.z = this.radius + Math.abs(30*(Math.sin(this.step)));
+		this.position.y = -20 + (20*Math.cos(this.step));
+		this.rotateX(step);
+
 	}
 }
