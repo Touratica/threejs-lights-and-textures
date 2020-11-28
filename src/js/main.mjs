@@ -146,12 +146,6 @@ function changeAllWireFrames(){
 
 }
 
-function pause_unpause(){
-	if(pause){
-		createPauseMessage();
-	}
-}
-
 export function animate() {
 	// Animation functions
 
@@ -256,7 +250,6 @@ function onKeyDown(e) {
 		case "S":	// Pause
 		case "s":
 			pause = !pause;
-			pause_unpause();
 			break;
 		case "R":	// Reset
 		case "r":
@@ -278,10 +271,9 @@ export function __init__() {
 	document.body.appendChild(renderer.domElement);
 
 	createScene();
-	createPauseMessage();
 	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);
 	PerspectiveCamera = createPerspectiveCamera(60, -60, 20);
-	
+	createPauseMessage();
 	const controls = new OrbitControls( PerspectiveCamera, renderer.domElement );
 	controls.update();
 	render();
