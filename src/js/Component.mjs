@@ -1,10 +1,9 @@
 import * as THREE from '../../node_modules/three/build/three.module.js';
-import {allMaterials} from './main.mjs';
 
 export class Component extends THREE.Object3D {
 	constructor(x, y, z) {
 		super();
-		this.position.set(x,y,z);
+		this.position.set(x, y, z);
         this.phongMesh = [];
 		this.basicMesh = [];
 	}
@@ -12,17 +11,16 @@ export class Component extends THREE.Object3D {
 	addCuboid(x, y, z, w, h, d, color) {
 		let geometry = new THREE.BoxGeometry(d, w, h);
 		let meshPhong = new THREE.MeshPhongMaterial({color: color, wireframe : false});
-		let basicMat = new THREE.Mesh(geometry,new THREE.MeshBasicMaterial({color: color, wireframe :false}));
-		let phongMat = new THREE.Mesh(geometry,meshPhong );
+		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: color, wireframe :false}));
+		let phongMat = new THREE.Mesh(geometry, meshPhong);
 		
-		basicMat.position.set(x,y,z);
-		phongMat.position.set(x,y,z);
+		basicMat.position.set(x, y, z);
+		phongMat.position.set(x, y, z);
 		
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
 		
 		this.add(phongMat);
-		
 	}
 
 	addPlane(w, d, textureMapPath, bumpMapPath) {
@@ -31,10 +29,10 @@ export class Component extends THREE.Object3D {
 		//width, height, width segments, height segments
 		let bump = new THREE.TextureLoader().load(bumpMapPath);
 		let texture = new THREE.TextureLoader().load(textureMapPath);
-		let meshPhong = new THREE.MeshPhongMaterial({map : texture, bumpMap: bump , wireframe : false})
-		let meshBasic = new THREE.MeshBasicMaterial({map : texture , wireframe : false})
-		let basicMat = new THREE.Mesh(geometry,meshBasic );
-		let phongMat = new THREE.Mesh(geometry,meshPhong );
+		let meshPhong = new THREE.MeshPhongMaterial({map: texture, bumpMap:bump, wireframe: false});
+		let meshBasic = new THREE.MeshBasicMaterial({map: texture, wireframe : false});
+		let basicMat = new THREE.Mesh(geometry, meshBasic);
+		let phongMat = new THREE.Mesh(geometry, meshPhong);
 
 		
 		bump.wrapS = THREE.RepeatWrapping;
@@ -48,14 +46,11 @@ export class Component extends THREE.Object3D {
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
 		this.add(phongMat);
-		
 	}
-
-	
 
 	addCylinderVertical(x, y, z, base, height, color) { 
 		let geometry = new THREE.CylinderGeometry(base / 2, base / 2, height, 16, 1);
-		let meshPhong = new THREE.MeshPhongMaterial({color: color, wireframe : false})
+		let meshPhong = new THREE.MeshPhongMaterial({color: color, wireframe: false})
 		let basicMat = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: color}));
 		let phongMat = new THREE.Mesh(geometry, meshPhong);
 		
@@ -72,16 +67,15 @@ export class Component extends THREE.Object3D {
 		this.basicMesh.push(basicMat);
         
 		this.add(phongMat);
-		
 	}
 
-	addSphere(radius,textureMapPath ,bumpMapPath) {
+	addSphere(radius, textureMapPath, bumpMapPath) {
 
 		let geometry = new THREE.SphereGeometry(radius, 32, 32);
 		let bump = new THREE.TextureLoader().load(bumpMapPath);
 		let texture = new THREE.TextureLoader().load(textureMapPath);
-		let mesh = new THREE.MeshBasicMaterial({map : texture , wireframe : false});
-		let phongMesh = new THREE.MeshPhongMaterial({ color: "white", bumpMap: bump, shininess : 70,bumpScale: 1});
+		let mesh = new THREE.MeshBasicMaterial({map : texture, wireframe : false});
+		let phongMesh = new THREE.MeshPhongMaterial({ color: "white", bumpMap: bump, shininess : 70, bumpScale: 1});
 		let basicMat = new THREE.Mesh(geometry, mesh);
 		let phongMat = new THREE.Mesh(geometry, phongMesh);
 
@@ -92,10 +86,7 @@ export class Component extends THREE.Object3D {
 		this.phongMesh.push(phongMat);
 		this.basicMesh.push(basicMat);
 		this.add(phongMat);
-		
 	}
-
-	
 
 	addComponent(comp, x, y, z) {
 		this.add(comp);
@@ -107,7 +98,6 @@ export class Component extends THREE.Object3D {
 	}
 	
 	changeMesh() {
-		
 		if (this.currentMesh === this.phongMesh) {
 			console.log("entrei");
 			this.removeMesh();
@@ -117,11 +107,8 @@ export class Component extends THREE.Object3D {
 			this.removeMesh();
 			this.addMesh(this.phongMesh);
 		}
-		
-		
 	}
 
-	
 	//addMesh changes all the meshes.
 	addMesh(meshVector) { 
         this.currentMesh = meshVector;
@@ -132,19 +119,16 @@ export class Component extends THREE.Object3D {
 
 	//removes the mesh of all objects.
 	removeMesh() {
-		
 		for (let i = 0; i < this.currentMesh.length; i++) {
 			this.remove(this.currentMesh[i]);
 		}
-		
 	}
 
-	Rotate(a){
+	Rotate(a) {
 		this.rotateZ(a);
 	}
 
-	initial_state(){
-
+	initial_state() {
 		for (let i = 0; i < this.phongMesh.length; i++) {
 			this.phongMesh[i].wireframe = false;
 		}
@@ -153,13 +137,12 @@ export class Component extends THREE.Object3D {
 			this.basicMesh[i].wireframe = false;
 		}
 		
-		if (this.currentMesh == this.basicMesh){
+		if (this.currentMesh == this.basicMesh) {
 			this.changeMesh();
 		}
-
 	}
 
-	changeWireframe(){
+	changeWireframe() {
 		for (let i = 0; i < this.phongMesh.length; i++) {
 			this.phongMesh[i].material.wireframe = !this.phongMesh[i].material.wireframe;
 		}
@@ -168,6 +151,4 @@ export class Component extends THREE.Object3D {
 			this.basicMesh[i].material.wireframe = !this.basicMesh[i].material.wireframe;
 		}
 	}
-
-	
 }

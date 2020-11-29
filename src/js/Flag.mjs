@@ -8,7 +8,7 @@ export class Flag extends Component {
 
 		this.currentMesh = this.phongMesh;
 		this.motion = true;
-		this.lookAt(20,0,20);
+		this.lookAt(20, 0, 20);
 	}
 
 	get_motion(){
@@ -27,5 +27,4 @@ export class Flag extends Component {
 		super.initial_state();
 		this.lookAt(20,0,20);
 	}
-
 }

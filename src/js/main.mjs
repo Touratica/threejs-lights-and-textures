@@ -17,7 +17,7 @@ let on_off_Directional = 0;
 let pointLight;
 let on_off_Point;
 
-export let allMaterials = [];
+let allMaterials = [];
 let changeWireframe = false;
 let changeMesh = false;
 
@@ -41,42 +41,44 @@ let pause = false;
 // Sets the z-axis as the top pointing one
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
-function createSkyBox(){
+function createSkyBox() {
 
-	let skyboxgeo = new THREE.CubeGeometry(grassW,grassW,grassD);
+	let skyboxgeo = new THREE.CubeGeometry(grassW, grassW, grassD);
 
 	let skyboxfaces = [
 		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/px.png"), side: THREE.BackSide}),
-		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nx.png"),side: THREE.BackSide}),
-		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/py.png"),side: THREE.BackSide}),
-		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/ny.png"),side: THREE.BackSide}),
-		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/pz.png"),side: THREE.BackSide}),
-		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nz.png"),side: THREE.DoubleSide})
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nx.png"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/py.png"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/ny.png"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/pz.png"), side: THREE.BackSide}),
+		new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("../media/cubemap/nz.png"), side: THREE.DoubleSide})
 	];
 
-	let skyboxmaterial = new THREE.MeshFaceMaterial (skyboxfaces);
+	let skyboxmaterial = new THREE.MeshFaceMaterial(skyboxfaces);
 
-	let skyboxmesh = new THREE.Mesh(skyboxgeo,skyboxmaterial);
+	let skyboxmesh = new THREE.Mesh(skyboxgeo, skyboxmaterial);
 
-	skyboxmesh.position.set(0,0,grassW/2-1)
+	skyboxmesh.position.set(0, 0, grassW / 2 - 1);
 
 	scene[0].add(skyboxmesh);
 }
+
 //creates a new scene with Pause Mode
 function createPauseMessage() {
 	scene[1] = new THREE.Scene();
   
 	let spriteMap = new THREE.TextureLoader().load('../media/pauseScreen.png');
 	let spriteMaterial = new THREE.SpriteMaterial({
-	  map: spriteMap
+		map: spriteMap
 	});
 	let message = new THREE.Sprite(spriteMaterial);
-	message.scale.set(20, 20, 1);
+	let scaleRatio = 100 * window.innerWidth / window.innerHeight;
+	message.scale.set(scaleRatio, scaleRatio, 0);
 	message.visible = true;
-	message.position.set(0,0,0);
+	message.position.set(0, 0, 20);
   
 	scene[1].add(message);
-  }
+}
 
 function createOrtogonalCamera(x, y, z) {
 	// Adjusts camera ratio so the scene is totally visible 
@@ -105,7 +107,6 @@ function createPerspectiveCamera(x, y, z) {
 }
 
 function createScene() {
-	
 	scene[0] = new THREE.Scene();
 	createSkyBox();
 	// scene.background = new THREE.Color("black");
@@ -115,10 +116,10 @@ function createScene() {
 	grass = new Grass(0, 0, 0, grassW, grassD, "../media/grass.png", "../media/grass_bumpMap.png");
 	scene[0].add(grass);
 
-	ball = new Ball(0,0,ball_radius,ball_radius,"../media/ball.jpeg", "../media/bump_ball.jpeg");
+	ball = new Ball(0, 0, ball_radius, ball_radius, "../media/ball.jpeg", "../media/bump_ball.jpeg");
 	scene[0].add(ball);
 
-	flag = new Flag(20,0,stem_height/2,stem_base,stem_height,stem_color,flag_color,flag_w,flag_h,flag_d);
+	flag = new Flag(20, 0, stem_height / 2, stem_base, stem_height, stem_color, flag_color, flag_w, flag_h, flag_d);
 	scene[0].add(flag);
 
 	directionalLight = new THREE.DirectionalLight(0xffffff, 0.6);
@@ -134,16 +135,14 @@ function createScene() {
   	let sphereSize = 3;
 	let pointLightHelper = new THREE.PointLightHelper(pointLight, sphereSize);
   	//scene[0].add(pointLightHelper);
-
-
 }
+
 function changeAllWireFrames(){
 	ball.changeWireframe();
 	flag.changeWireframe();
 	grass.changeWireframe();
 
 	changeWireframe = false;
-
 }
 
 export function animate() {
@@ -178,11 +177,11 @@ export function animate() {
 		changeMesh = false;
 	}
 
-	if(ball.get_motion() && !pause){
+	if (ball.get_motion() && !pause) {
 		ball.move(velocity * timeDelta);
 	}
 	
-	if(flag.get_motion() && !pause){
+	if (flag.get_motion() && !pause) {
 		flag.Rotate(timeDelta * angSpeed);
 	}
 
@@ -192,17 +191,16 @@ export function animate() {
 }
 
 function render() {
-
 	renderer.autoClear = false;
 	renderer.clear();
 	renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
 	renderer.render(scene[0], PerspectiveCamera);
 	
-	if(pause){
+	if (pause) {
 		renderer.setViewport(0, 0, window.innerWidth, window.innerHeight);
 		renderer.render(scene[1], OrtogonalCamera);
 	}
-  }
+}
 
 function onResize() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
@@ -226,7 +224,7 @@ function onKeyDown(e) {
 
 		case "B":	// stops the movement of the ball
 		case "b":
-			if (!pause){
+			if (!pause) {
 				ball.change_motion();
 			}
 			break;	
@@ -253,7 +251,7 @@ function onKeyDown(e) {
 			break;
 		case "R":	// Reset
 		case "r":
-			if(pause){
+			if (pause) {
 				ball.initial_state();
 				flag.initial_state();
 				grass.initial_state();
@@ -261,8 +259,6 @@ function onKeyDown(e) {
 			break;
 	}
 }
-
-
 
 export function __init__() {
 	renderer = new THREE.WebGLRenderer({antialias: true});
@@ -274,10 +270,9 @@ export function __init__() {
 	OrtogonalCamera = createOrtogonalCamera(0, 100, 20);
 	PerspectiveCamera = createPerspectiveCamera(60, -60, 20);
 	createPauseMessage();
-	const controls = new OrbitControls( PerspectiveCamera, renderer.domElement );
+	const controls = new OrbitControls(PerspectiveCamera, renderer.domElement);
 	controls.update();
 	render();
 	window.addEventListener("resize", onResize)
 	window.addEventListener("keydown", onKeyDown);
-	
 }
