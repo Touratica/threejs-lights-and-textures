@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Touratica/threejs-lights-and-textures#readme",
   "dependencies": {
-    "three": "^0.124.0"
+    "three": "^0.142.0"
   },
   "devDependencies": {
     "css-loader": "^6.7.1",

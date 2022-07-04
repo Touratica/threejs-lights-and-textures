@@ -56,7 +56,7 @@ let pause = false;
 THREE.Object3D.DefaultUp.set(0, 0, 1);
 
 function createSkyBox() {
-  let skyboxgeo = new THREE.CubeGeometry(grassW, grassW, grassD);
+  let skyboxgeo = new THREE.BoxGeometry(grassW, grassW, grassD);
 
   let skyboxfaces = [
     new THREE.MeshBasicMaterial({
@@ -85,9 +85,7 @@ function createSkyBox() {
     }),
   ];
 
-  let skyboxmaterial = new THREE.MeshFaceMaterial(skyboxfaces);
-
-  let skyboxmesh = new THREE.Mesh(skyboxgeo, skyboxmaterial);
+  let skyboxmesh = new THREE.Mesh(skyboxgeo, skyboxfaces);
 
   skyboxmesh.position.set(0, 0, grassW / 2 - 1);
 
