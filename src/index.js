@@ -1,8 +1,23 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
 import Grass from "./Grass.js";
 import Ball from "./Ball.js";
 import Flag from "./Flag.js";
+
+import Nx from "../assets/cubemap/nx.png";
+import Ny from "../assets/cubemap/ny.png";
+import Nz from "../assets/cubemap/nz.png";
+import Px from "../assets/cubemap/px.png";
+import Py from "../assets/cubemap/py.png";
+import Pz from "../assets/cubemap/pz.png";
+
+import ballBumpMap from "../assets/ballBumpMap.jpeg";
+import ballTexture from "../assets/ballTexture.jpeg";
+import grassBumpMap from "../assets/grassBumpMap.png";
+import grassTexture from "../assets/grassTexture.png";
+import pauseScreen from "../assets/pauseScreen.png";
+
 import "./style.css";
 
 let camera, PerspectiveCamera, OrtogonalCamera;
@@ -45,27 +60,27 @@ function createSkyBox() {
 
   let skyboxfaces = [
     new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load("../media/cubemap/px.png"),
+      map: new THREE.TextureLoader().load(Px),
       side: THREE.BackSide,
     }),
     new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load("../media/cubemap/nx.png"),
+      map: new THREE.TextureLoader().load(Nx),
       side: THREE.BackSide,
     }),
     new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load("../media/cubemap/py.png"),
+      map: new THREE.TextureLoader().load(Py),
       side: THREE.BackSide,
     }),
     new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load("../media/cubemap/ny.png"),
+      map: new THREE.TextureLoader().load(Ny),
       side: THREE.BackSide,
     }),
     new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load("../media/cubemap/pz.png"),
+      map: new THREE.TextureLoader().load(Pz),
       side: THREE.BackSide,
     }),
     new THREE.MeshBasicMaterial({
-      map: new THREE.TextureLoader().load("../media/cubemap/nz.png"),
+      map: new THREE.TextureLoader().load(Nz),
       side: THREE.DoubleSide,
     }),
   ];
@@ -83,7 +98,7 @@ function createSkyBox() {
 function createPauseMessage() {
   scene[1] = new THREE.Scene();
 
-  let spriteMap = new THREE.TextureLoader().load("../media/pauseScreen.png");
+  let spriteMap = new THREE.TextureLoader().load(pauseScreen);
   let spriteMaterial = new THREE.SpriteMaterial({
     map: spriteMap,
   });
@@ -134,25 +149,10 @@ function createScene() {
 
   // Adds axes to the scene: x-axis is red, y-axis is green, z-axis is blue
   //cene[0].add(new THREE.AxesHelper(30));
-  grass = new Grass(
-    0,
-    0,
-    0,
-    grassW,
-    grassD,
-    "../media/grass.png",
-    "../media/grass_bumpMap.png"
-  );
+  grass = new Grass(0, 0, 0, grassW, grassD, grassTexture, grassBumpMap);
   scene[0].add(grass);
 
-  ball = new Ball(
-    0,
-    0,
-    ball_radius,
-    ball_radius,
-    "../media/ball.jpeg",
-    "../media/bump_ball.jpeg"
-  );
+  ball = new Ball(0, 0, ball_radius, ball_radius, ballTexture, ballBumpMap);
   scene[0].add(ball);
 
   flag = new Flag(
