@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
-import Grass from "./Grass.js";
-import Ball from "./Ball.js";
-import Flag from "./Flag.js";
+import Grass from "./Grass";
+import Ball from "./Ball";
+import Flag from "./Flag";
 
 import Nx from "../assets/cubemap/nx.png";
 import Ny from "../assets/cubemap/ny.png";

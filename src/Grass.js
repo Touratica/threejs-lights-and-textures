@@ -1,4 +1,4 @@
-import Component from "./Component.js";
+import Component from "./Component";
 
 export default class Grass extends Component {
   constructor(x, y, z, w, d, TextureMapPath, bumpMapPath) {

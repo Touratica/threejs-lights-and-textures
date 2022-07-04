@@ -1,4 +1,4 @@
-import Component from "./Component.js";
+import Component from "./Component";
 
 export default class Flag extends Component {
   constructor(x, y, z, base, height, colorCylinder, colorCube, w, h, d) {
