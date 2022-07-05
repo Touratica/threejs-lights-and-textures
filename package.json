@@ -1,7 +1,7 @@
 {
   "name": "threejs-lights-and-textures",
   "version": "1.0.0",
-  "description": "",
+  "description": "A project developed around the Three.js 3D library, exploring the concepts of light and textures.",
   "private": true,
   "scripts": {
     "build": "webpack --config webpack.prod.js",
