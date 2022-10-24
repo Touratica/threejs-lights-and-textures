@@ -30,7 +30,7 @@ export default class Component extends THREE.Object3D {
   }
 
   addPlane(w, d, textureMapPath, bumpMapPath) {
-    let geometry = new THREE.PlaneBufferGeometry(d, w, 50, 50);
+    let geometry = new THREE.PlaneGeometry(d, w, 50, 50);
     //width, height, width segments, height segments
     let bump = new THREE.TextureLoader().load(bumpMapPath);
     let texture = new THREE.TextureLoader().load(textureMapPath);
