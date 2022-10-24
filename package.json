@@ -1,6 +1,6 @@
 {
   "name": "threejs-lights-and-textures",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A project developed around the Three.js 3D library, exploring the concepts of light and textures.",
   "private": true,
   "scripts": {
