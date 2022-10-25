@@ -1,12 +1,13 @@
 {
   "name": "threejs-lights-and-textures",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A project developed around the Three.js 3D library, exploring the concepts of light and textures.",
-  "private": true,
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "start": "webpack serve --open --config webpack.dev.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=production --node-env=production",
+    "build:dev": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --node-env=production",
+    "watch": "webpack --watch",
+    "serve": "webpack serve",
     "prepare": "husky install"
   },
   "repository": {
@@ -23,16 +24,17 @@
     "three": "^0.145.0"
   },
   "devDependencies": {
+    "@webpack-cli/generators": "^2.5.0",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
+    "mini-css-extract-plugin": "^2.6.1",
     "prettier": "^2.7.1",
     "style-loader": "^3.3.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.11.1",
-    "webpack-merge": "^5.8.0"
+    "webpack-dev-server": "^4.11.1"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

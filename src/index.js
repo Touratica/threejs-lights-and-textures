@@ -12,8 +12,8 @@ import Px from "../assets/cubemap/px.png";
 import Py from "../assets/cubemap/py.png";
 import Pz from "../assets/cubemap/pz.png";
 
-import ballBumpMap from "../assets/ballBumpMap.jpeg";
-import ballTexture from "../assets/ballTexture.jpeg";
+import ballBumpMap from "../assets/ballBumpMap.jpg";
+import ballTexture from "../assets/ballTexture.jpg";
 import grassBumpMap from "../assets/grassBumpMap.png";
 import grassTexture from "../assets/grassTexture.png";
 import pauseScreen from "../assets/pauseScreen.png";
